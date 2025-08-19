@@ -14,7 +14,7 @@ const isProd = process.env.NODE_ENV === 'production';
 const baseCookieOpts: CookieOptions = {
   httpOnly: true,
   secure: isProd,
-  sameSite: 'lax',
+  sameSite: isProd ? 'none' : 'lax',
   path: '/', // важливо для правильного видалення
 };
 
@@ -36,15 +36,21 @@ export class AuthController {
     // ВАРІАНТ B (сесійна кука без maxAge, якщо не remember):
     // if (dto.remember) opts.maxAge = 30 * 24 * 60 * 60 * 1000;
 
+
+    // Ім'я куки узгоджуй з JwtStrategy!
     res.cookie('token', access_token, opts);
     return { message: 'Login successful' };
   }
 
+  
+  
   @Post('signup')
   async signup(@Body() body: CreateUserDto) {
     return this.authService.signup(body);
   }
 
+  
+  
   // /auth/me — витягуємо дані з токена
   @UseGuards(JwtAuthGuard)
   @Get('me')
