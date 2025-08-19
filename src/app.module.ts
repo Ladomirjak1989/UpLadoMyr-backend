@@ -35,24 +35,27 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { TerminusModule } from '@nestjs/terminus';
+import { HealthController } from './health/health.controller';
 
-const isExternal =
-  (process.env.DATABASE_URL ?? '').includes('.internal') === false;
+const isExternal = (process.env.DATABASE_URL ?? '').includes('.internal') === false;
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      url: process.env.DATABASE_URL,       // <-- єдина канонічна змінна
+      url: process.env.DATABASE_URL,
       autoLoadEntities: true,
-      synchronize: process.env.DB_SYNC === 'true', // див. крок 3
-      ssl: isExternal ? { rejectUnauthorized: false } : false, // External -> SSL, Internal -> без SSL
+      synchronize: false, // <- фіксуємо вимкнено
+      ssl: isExternal ? { rejectUnauthorized: false } : false,
     }),
+    TerminusModule,
     UserModule,
     AuthModule,
   ],
+  controllers: [HealthController],
 })
-export class AppModule { }
+export class AppModule {}
 
 
