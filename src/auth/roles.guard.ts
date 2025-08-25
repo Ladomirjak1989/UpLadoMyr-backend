@@ -1,7 +1,9 @@
+
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
-import { UserPayload } from 'types/user-payload';
+import { UserPayload } from '../types/user-payload';
+
 
 
 @Injectable()

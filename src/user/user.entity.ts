@@ -5,24 +5,24 @@ export type UserRole = 'user' | 'admin';
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({ length: 100 })
-  username: string;
+  username!: string;
 
   @Column({ length: 150, unique: true })
-  email: string;
+  email!: string;
 
   @Column({ length: 255 })
-  password: string;
+  password!: string;
 
   @Column({ type: 'enum', enum: ['user', 'admin'], default: 'user' })
-  role: UserRole;
+  role!: UserRole;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  updatedAt!: Date;
 
 }

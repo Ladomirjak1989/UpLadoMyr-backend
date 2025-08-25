@@ -4,9 +4,12 @@ import { AuthService } from './auth.service';
 import { Response, Request } from 'express';
 import type { CookieOptions } from 'express-serve-static-core';
 import { JwtAuthGuard } from './jwt-auth.guard';
-import { UserPayload } from 'types/user-payload';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
+
+
+import { UserPayload } from '../types/user-payload';
+import { CreateUserDto } from '../user/dto/create-user.dto';
+import { CurrentUser } from './current-user.decorator';
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -42,20 +45,20 @@ export class AuthController {
     return { message: 'Login successful' };
   }
 
-  
-  
+
+
   @Post('signup')
   async signup(@Body() body: CreateUserDto) {
     return this.authService.signup(body);
   }
 
-  
-  
+
+
   // /auth/me — витягуємо дані з токена
   @UseGuards(JwtAuthGuard)
   @Get('me')
-  getMe(@Req() req: Request & { user: UserPayload }) {
-    return req.user;
+  getMe(@CurrentUser() user: UserPayload) {
+    return user;
   }
 
   // LOGOUT — видаляємо куку по тим самим базовим опціям

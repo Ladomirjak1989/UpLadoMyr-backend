@@ -2,13 +2,13 @@ import { IsEmail, IsNotEmpty, MinLength, IsOptional, IsIn } from 'class-validato
 
 export class CreateUserDto {
   @IsNotEmpty({ message: 'Username is required' })
-  username: string;
+  username!: string;
 
   @IsEmail({}, { message: 'Invalid email format' })
-  email: string;
+  email!: string;
 
   @MinLength(6, { message: 'Password must be at least 6 characters long' })
-  password: string;
+  password!: string;
 
   @IsOptional()
   @IsIn(['user', 'admin'], { message: 'Role must be either user or admin' })

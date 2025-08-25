@@ -7,8 +7,9 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UserService } from '../user/user.service';
 import { User } from '../user/user.entity';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { LoginDto } from './dto/login.dto'; // ⬅️ додаємо DTO
+import { CreateUserDto } from '../user/dto/create-user.dto';
+
 
 type UserRole = User['role'];
 interface JwtPayload {
