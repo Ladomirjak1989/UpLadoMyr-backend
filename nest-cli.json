@@ -4,8 +4,8 @@
   "sourceRoot": "src",
   "entryFile": "main",
   "compilerOptions": {
-    "tsConfigPath": "tsconfig.build.json",
-    "deleteOutDir": true,
+    "tsConfigPath": "tsconfig.json",
+    "deleteOutDir": false,
     "webpack": false
   }
 }
