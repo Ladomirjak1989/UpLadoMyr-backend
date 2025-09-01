@@ -1,5 +1,5 @@
 // src/auth/dto/login.dto.ts
-import { IsEmail, IsString, MinLength, IsOptional, IsBoolean } from 'class-validator';
+import { IsEmail, IsString, MinLength, IsOptional, IsBoolean, IsIn } from 'class-validator';
 
 export class LoginDto {
   @IsEmail()
@@ -13,4 +13,10 @@ export class LoginDto {
   @IsOptional()
   @IsBoolean()
   remember?: boolean;
+
+
+   // нове керування TTL
+  @IsOptional()
+  @IsIn(['session', '1h', '30d'])
+  ttl?: 'session' | '1h' | '30d';
 }

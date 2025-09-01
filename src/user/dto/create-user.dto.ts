@@ -1,4 +1,6 @@
-import { IsEmail, IsNotEmpty, MinLength, IsOptional, IsIn } from 'class-validator';
+// src/user/dto/create-user.dto.ts
+import { IsEmail, IsNotEmpty, MinLength, IsOptional, IsEnum } from 'class-validator';
+import { UserRole } from '../user.entity';
 
 export class CreateUserDto {
   @IsNotEmpty({ message: 'Username is required' })
@@ -11,7 +13,8 @@ export class CreateUserDto {
   password!: string;
 
   @IsOptional()
-  @IsIn(['user', 'admin'], { message: 'Role must be either user or admin' })
-  role?: 'user' | 'admin'; // ❗️role перевіряється, але не обов’язкова
+  @IsEnum(UserRole, { message: 'Role must be either user or admin' })
+  role?: UserRole;     // 👈 тепер це enum
 }
+
 

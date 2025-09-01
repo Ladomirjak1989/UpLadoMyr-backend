@@ -5,13 +5,12 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { UserService } from '../user/user.service';
-import { User } from '../user/user.entity';
+import { UsersService } from '../user/user.service';
+import { User, UserRole } from '../user/user.entity';
 import { LoginDto } from './dto/login.dto'; // ⬅️ додаємо DTO
 import { CreateUserDto } from '../user/dto/create-user.dto';
 
 
-type UserRole = User['role'];
 interface JwtPayload {
   sub: number;
   email: string;
@@ -21,7 +20,7 @@ interface JwtPayload {
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly userService: UserService,
+    private readonly userService: UsersService,
     private readonly jwtService: JwtService,
   ) { }
 
@@ -29,7 +28,7 @@ export class AuthService {
     const user = await this.userService.findByEmail(email);
     if (!user) throw new UnauthorizedException('Invalid credentials');
 
-    const ok = await bcrypt.compare(password, user.password);
+    const ok = await bcrypt.compare(password, user.passwordHash);
     if (!ok) throw new UnauthorizedException('Invalid credentials');
 
     return user;
@@ -53,13 +52,16 @@ export class AuthService {
     return { access_token, expiresIn };
   }
 
+  // ⬇️ ПУБЛІЧНИЙ SIGNUP — роль завжди USER, ігноруємо будь-яке dto.role
   async signup(dto: CreateUserDto): Promise<{ message: string }> {
     const existing = await this.userService.findByEmail(dto.email);
     if (existing) throw new BadRequestException('Email already in use');
 
     await this.userService.create({
-      ...dto,
-      role: dto.role ?? 'user', // дефолт — user
+      username: dto.username,
+      email: dto.email,
+      password: dto.password,
+      role: UserRole.USER, // 🔒 фіксовано
     });
 
     return { message: 'User created successfully' };

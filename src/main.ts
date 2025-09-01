@@ -1,65 +1,26 @@
-// import { NestFactory } from '@nestjs/core';
-// import { AppModule } from './app.module';
-// import { ValidationPipe } from '@nestjs/common';
-// import * as cookieParser from 'cookie-parser';
-
-
-
-
-// async function bootstrap() {
-//   const app = await NestFactory.create(AppModule);
-
-
-//   // ✅ Додаємо глобальний prefix для API (опційно, якщо хочеш мати типу /api/users)
-//   app.setGlobalPrefix('api');
-
-//   // ✅ Включаємо глобальну валідацію DTO
-//   app.useGlobalPipes(
-//     new ValidationPipe({
-//       whitelist: true,         // видаляє зайві поля, які не описані в DTO
-//       forbidNonWhitelisted: true, // викине помилку, якщо будуть "ліві" поля
-//       transform: true,         // автоматично трансформує типи (наприклад string у number)
-//     }),
-//   );
-
-//   // ✅ Додаємо CORS для локальної розробки та продакшену
-//   const allowedOrigins = [
-//     'http://localhost:3000',
-//     'https://upladomyr.com',
-//   ];
-
-
-//   app.use(cookieParser())
-
-//   app.enableCors({
-//     origin: allowedOrigins,
-//     credentials: true,
-//     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-//     allowedHeaders: 'Content-Type, Authorization',
-//   });
-
-//   // ✅ Додаємо лог порту
-//   const port = process.env.PORT ?? 5000;
-//   console.log(`🚀 Server is running on port ${port}`);
-
-//   await app.listen(port);
-// }
-// bootstrap();
-
-
-
-
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import * as cookieParser from 'cookie-parser';
+// import * as cookieParser from 'cookie-parser';
 import helmet from 'helmet';
+import cookieParser = require('cookie-parser');
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  // 👇 Типізуємо як Express-варіант
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  // Дістаємо нативний інстанс Express
+  const express = app.getHttpAdapter().getInstance();
+
+  // Кеш/проксі
+  express.disable('etag');         // еквівалент app.set('etag', false)
+  express.set('trust proxy', 1);   // потрібне для Secure cookies за CDN/Render
+
 
   // Префікс /api
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix('api');                // -> /api/auth/...
+  
 
   // Безпека
   app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
@@ -74,11 +35,11 @@ async function bootstrap() {
   );
 
   // Куки
-  app.use(cookieParser());
+  app.use(cookieParser(process.env.COOKIE_SECRET));
 
   // CORS
   const allowedOrigins = [
-    process.env.FRONTEND_URL_LOCAL || 'http://localhost:3000',
+    process.env.FRONTEND_URL_LOCALHOST_URL || 'http://localhost:3000',
     process.env.FRONTEND_URL_PROD || 'https://upladomyr.com',
   ].filter(Boolean) as string[];
 
@@ -86,7 +47,7 @@ async function bootstrap() {
     origin: allowedOrigins,
     credentials: true,
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   });
 
   const port = Number(process.env.PORT) || 5000;
