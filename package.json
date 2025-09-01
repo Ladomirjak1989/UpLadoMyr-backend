@@ -7,8 +7,8 @@
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
-    "clean": "rimraf dist tsconfig*.tsbuildinfo",
-    "build": "nest build",
+    "clean": "rimraf --glob dist \"tsconfig*.tsbuildinfo\"",
+    "build": "rimraf --glob dist && nest build",
     "seed:admin": "node dist/cli/seed-admin.js",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -20,7 +20,17 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+
+    
+    "mig:gen": "typeorm-ts-node-esm -d src/data-source.ts migration:generate src/migrations/auto",
+    "mig:create": "typeorm-ts-node-esm -d src/data-source.ts migration:create src/migrations/custom",
+    "mig:run": "typeorm-ts-node-esm -d src/data-source.ts migration:run",
+    "mig:revert": "typeorm-ts-node-esm -d src/data-source.ts migration:revert",
+
+   
+    "mig:run:js": "node -e \"(async()=>{const ds=(await import('./dist/data-source.js')).default;await ds.initialize();await ds.runMigrations();await ds.destroy();})()\"",
+    "mig:revert:js": "node -e \"(async()=>{const ds=(await import('./dist/data-source.js')).default;await ds.initialize();await ds.undoLastMigration();await ds.destroy();})()\""
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -73,6 +83,7 @@
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
+    "typeorm-ts-node-esm": "^0.3.20",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.20.0"
   },

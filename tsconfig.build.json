@@ -8,13 +8,21 @@
     "declaration": false,
     "outDir": "./dist",
     "rootDir": "./src",
-    "noEmit": false
+    "noEmit": false,
+    "sourceMap": false,
+    "inlineSourceMap": false,
+    "declarationMap": false,
+    "removeComments": true,
+     "types": ["node"]  
   },
+  "include": ["src/**/*"],
   "exclude": [
     "node_modules",
     "test",
     "dist",
     "**/*.spec.ts",
-    "**/*.e2e-spec.ts"
+    "**/*.e2e-spec.ts", 
+    "src/**/__tests__/*",
+    "src/**/*.spec.ts"
   ]
 }
