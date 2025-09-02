@@ -52,32 +52,36 @@ import 'dotenv/config';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { join } from 'path';
 
-// ====== ЯВНІ МІГРАЦІЇ (без glob) ======
+// ===== ЯВНІ МІГРАЦІЇ (класи) =====
 import { RenamePasswordToPasswordHash1724760000000 } from './migrations/1724760000000-RenamePasswordToPasswordHash';
 import { TimestampsToTimestamptz1724760000001 } from './migrations/1724760000001-TimestampsToTimestamptz';
 import { DryRun1725210000000 } from './migrations/1725210000000-DryRun';
 
+// Патерн для ентіті працює і в TS, і в зібраному dist (JS)
 const entities = [join(__dirname, '**/*.entity.{js,ts}')];
-// важливо: передаємо класи, а не шлях
-const migrations = [
+
+// Передаємо класи міграцій напряму
+const MIGRATIONS = [
     RenamePasswordToPasswordHash1724760000000,
     TimestampsToTimestamptz1724760000001,
     DryRun1725210000000,
 ];
 
-const url = process.env.DATABASE_URL ?? '';
-
+// Спільні опції
 const common: Pick<
     DataSourceOptions,
-    'entities' | 'migrations' | 'migrationsRun' | 'logging'
+    'entities' | 'migrations' | 'migrationsRun' | 'logging' | 'synchronize'
 > = {
     entities,
-    migrations,
-    migrationsRun: true,   // авто-виконання міграцій на старті
-    logging: true,         // видно у логах Render
+    migrations: MIGRATIONS,
+    migrationsRun: true,   // авто-запуск міграцій на старті
+    logging: true,         // видно SQL у логах (зручно на Render)
+    synchronize: false,    // НІКОЛИ не вмикати на проді
 };
 
-// ===== PROD (DATABASE_URL) =====
+// ===== PROD через DATABASE_URL =====
+const url = process.env.DATABASE_URL ?? '';
+
 const prod: DataSourceOptions = {
     type: 'postgres',
     url,
@@ -91,7 +95,7 @@ const prod: DataSourceOptions = {
     ...common,
 };
 
-// ===== DEV (локальний) =====
+// ===== DEV (локально по хост/порту) =====
 const host = process.env.DB_HOST ?? 'localhost';
 
 const dev: DataSourceOptions = {
@@ -111,5 +115,10 @@ const dev: DataSourceOptions = {
     ...common,
 };
 
-export default new DataSource(url ? prod : dev);
+// Єдиний DataSource для імпорту з будь-яких скриптів
+const ds = new DataSource(url ? prod : dev);
 
+export default ds;
+// alias-и (іноді зручні для скриптів)
+export const appDataSource = ds;
+export const dataSource = ds;
