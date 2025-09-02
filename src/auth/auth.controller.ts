@@ -52,7 +52,7 @@ export class AuthController {
 
 
     // Ім'я куки узгоджуй з JwtStrategy!
-    res.cookie('token', access_token, opts);
+    res.cookie(COOKIE_NAME, access_token, opts);
     return { message: 'Login successful' };
   }
 
