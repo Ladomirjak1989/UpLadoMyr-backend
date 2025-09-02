@@ -24,6 +24,7 @@ pnpm-debug.log*
 
 # TypeScript
 *.tsbuildinfo
+tsconfig*.tsbuildinfo
 
 # Test/coverage
 coverage/

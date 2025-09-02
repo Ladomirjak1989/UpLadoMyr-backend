@@ -8,7 +8,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "clean": "rimraf --glob dist \"tsconfig*.tsbuildinfo\"",
-    "build": "rimraf --glob dist && nest build",
+    "build": "nest build",
     "seed:admin": "node dist/cli/seed-admin.js",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
