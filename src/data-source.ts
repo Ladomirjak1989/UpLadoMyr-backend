@@ -52,31 +52,35 @@ import 'dotenv/config';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { join } from 'path';
 
-// Універсальні патерни: у prod підхопить dist/*.js, локально — src/*.ts
-const entities = [join(__dirname, '**/*.entity.{js,ts}')];
-const migrations = [join(__dirname, 'migrations/*.{js,ts}')];
+// ====== ЯВНІ МІГРАЦІЇ (без glob) ======
+import { RenamePasswordToPasswordHash1724760000000 } from './migrations/1724760000000-RenamePasswordToPasswordHash';
+import { TimestampsToTimestamptz1724760000001 } from './migrations/1724760000001-TimestampsToTimestamptz';
+import { DryRun1725210000000 } from './migrations/1725210000000-DryRun';
 
-// Корисно бачити у логах, що саме підхоплюється
-console.log('[TypeORM] Entities glob:', entities);
-console.log('[TypeORM] Migrations glob:', migrations);
+const entities = [join(__dirname, '**/*.entity.{js,ts}')];
+// важливо: передаємо класи, а не шлях
+const migrations = [
+    RenamePasswordToPasswordHash1724760000000,
+    TimestampsToTimestamptz1724760000001,
+    DryRun1725210000000,
+];
 
 const url = process.env.DATABASE_URL ?? '';
 
-// Спільні опції для обох середовищ
-const common: Pick<DataSourceOptions, 'entities' | 'migrations' | 'migrationsRun' | 'logging'> = {
+const common: Pick<
+    DataSourceOptions,
+    'entities' | 'migrations' | 'migrationsRun' | 'logging'
+> = {
     entities,
     migrations,
-    // Автовиконання міграцій на старті
-    migrationsRun: true,
-    // Увімкни логування запитів/операцій — зручно для Render логів
-    logging: true,
+    migrationsRun: true,   // авто-виконання міграцій на старті
+    logging: true,         // видно у логах Render
 };
 
-// --- Production (DATABASE_URL) ---
+// ===== PROD (DATABASE_URL) =====
 const prod: DataSourceOptions = {
     type: 'postgres',
     url,
-    // Авто SSL для керованих провайдерів (Render/Neon/AWS)
     ssl:
         url &&
             (url.includes('render.com') ||
@@ -87,7 +91,7 @@ const prod: DataSourceOptions = {
     ...common,
 };
 
-// --- Development (локальна БД або вручну задані хости) ---
+// ===== DEV (локальний) =====
 const host = process.env.DB_HOST ?? 'localhost';
 
 const dev: DataSourceOptions = {
@@ -107,9 +111,5 @@ const dev: DataSourceOptions = {
     ...common,
 };
 
-// Якщо є DATABASE_URL — вважаємо, що це prod
-const dataSource = new DataSource(url ? prod : dev);
-
-// Для скриптів типу `typeorm-ts-node-esm -d src/data-source.ts ...`
-export default dataSource;
+export default new DataSource(url ? prod : dev);
 
