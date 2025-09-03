@@ -18,7 +18,7 @@ const baseCookieOpts: CookieOptions = {
   secure: isProd,
   sameSite: isProd ? 'none' : 'lax', // різні домени → 'none'; один сайт → 'lax'
   path: '/', // важливо для правильного видалення
-  signed: Boolean(process.env.COOKIE_SECRET), // якщо є секрет — підписуємо
+  signed: !!(process.env.COOKIE_SECRET), // якщо є секрет — підписуємо
   // domain: '.upladomyr.com',    // ДОДАЄШ лише коли бек і фронт на одному апексі з піддоменами
 };
 

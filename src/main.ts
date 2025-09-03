@@ -35,7 +35,7 @@ async function bootstrap() {
   );
 
   // Куки
-  app.use(cookieParser(process.env.COOKIE_SECRET));
+  app.use(cookieParser(process.env.COOKIE_SECRET || undefined));
 
   // CORS
   const allowedOrigins = [
