@@ -7,6 +7,7 @@
     "outDir": "./dist",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "strictPropertyInitialization": false,
     "strict": true,
     "skipLibCheck": true,
     "types": [
@@ -15,18 +16,28 @@
     ],
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
+    
     "paths": {
-      "src/*": [
+      "@/*": [
         "src/*"
+      ],
+      "@utils/*": [
+        "src/utils/*"
+      ],
+      "@projects/*": [
+        "src/projects/*"
+      ],
+      "@auth/*": [
+        "src/auth/*"
       ]
     },
     "sourceMap": true,
     "incremental": true,
-    "noEmit": false,
+    "noEmit": false
   },
   "include": [
     "src",
     "src/types",
-    "src/**/*",
+    "src/**/*"
   ]
 }
