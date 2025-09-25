@@ -7,6 +7,7 @@ import { join } from 'path';
 import { RenamePasswordToPasswordHash1724760000000 } from './migrations/1724760000000-RenamePasswordToPasswordHash';
 import { TimestampsToTimestamptz1724760000001 } from './migrations/1724760000001-TimestampsToTimestamptz';
 import { DryRun1725210000000 } from './migrations/1725210000000-DryRun';
+import {AddOauthColumnsToUsers1727140000000} from './migrations/1727140000000-AddOauthColumnsToUsers'
 
 // Патерн для ентіті працює і в TS, і в зібраному dist (JS)
 const entities = [join(__dirname, '**/*.entity.{js,ts}')];
@@ -16,6 +17,7 @@ const MIGRATIONS = [
     RenamePasswordToPasswordHash1724760000000,
     TimestampsToTimestamptz1724760000001,
     DryRun1725210000000,
+    AddOauthColumnsToUsers1727140000000,
 ];
 
 // Спільні опції
@@ -68,6 +70,8 @@ const dev: DataSourceOptions = {
 
 // Єдиний DataSource для імпорту з будь-яких скриптів
 const ds = new DataSource(url ? prod : dev);
+console.log('DS loaded. NODE_ENV=', process.env.NODE_ENV);
+console.log('Migrations from DS:', ds.options?.migrations);
 
 export default ds;
 // alias-и (іноді зручні для скриптів)

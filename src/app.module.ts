@@ -34,8 +34,8 @@ import { HealthController } from './health/health.controller';
             synchronize: false,
             // migrationsRun: true,
             // migrations: [join(__dirname, 'migrations/*.{js}')],
-            migrations: [],
-            migrationsRun: false,
+            // migrations: [],
+            // migrationsRun: false,
             ssl: isExternal ? { rejectUnauthorized: false } : false,
             logging: debugDb ? 'all' : ['error', 'warn'],
           };
