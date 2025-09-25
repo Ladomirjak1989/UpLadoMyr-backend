@@ -40,3 +40,7 @@ coverage/
 # OS
 .DS_Store
 Thumbs.db
+
+# personal notes
+NOTES.md
+

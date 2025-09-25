@@ -1,9 +1,12 @@
+import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import helmet from 'helmet';
 import cookieParser = require('cookie-parser');
 import { NestExpressApplication } from '@nestjs/platform-express';
+
+
 
 async function bootstrap() {
   // 👇 Типізуємо як Express-варіант
@@ -19,7 +22,7 @@ async function bootstrap() {
 
   // Префікс /api
   app.setGlobalPrefix('api');                // -> /api/auth/...
-  
+
 
   // Безпека
   app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
@@ -47,13 +50,33 @@ async function bootstrap() {
     origin: allowedOrigins,
     credentials: true,
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
-    
+
   });
 
   const port = Number(process.env.PORT) || 5000;
   console.log(`🚀 Server is running on port ${port}`);
 
   await app.listen(port, '0.0.0.0');
+
+
+  // const expressApp: any = app.getHttpAdapter().getInstance();
+  // const routes: string[] = [];
+  // expressApp._router?.stack?.forEach((layer: any) => {
+  //   if (layer.route?.path) {
+  //     const methods = Object.keys(layer.route.methods).join(',').toUpperCase();
+  //     routes.push(`${methods}  ${layer.route.path}`);
+  //   } else if (layer.name === 'router' && layer.handle?.stack) {
+  //     layer.handle.stack.forEach((h: any) => {
+  //       if (h.route?.path) {
+  //         const methods = Object.keys(h.route.methods).join(',').toUpperCase();
+  //         routes.push(`${methods}  ${h.route.path}`);
+  //       }
+  //     });
+  //   }
+  // });
+  // console.log('🛣 Routes:\n' + routes.sort().join('\n'));
+
+
 }
 bootstrap();
 

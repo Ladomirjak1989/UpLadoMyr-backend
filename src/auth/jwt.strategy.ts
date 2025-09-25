@@ -12,7 +12,7 @@ import { UserRole } from '../user/user.entity';
 import { UserPayload } from '../types/user-payload';
 import { UsersService } from 'src/user/user.service';
 
-type JwtPayload = { sub: number; email: string; role: UserRole };
+type JwtPayload = { sub: number; email: string | null; role: UserRole };
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -43,7 +43,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(payload: JwtPayload): Promise<UserPayload> {
     const user = await this.users.findById(payload.sub);
     if (!user) throw new UnauthorizedException();
-    return { id: user.id, email: user.email, role: user.role };
+    return { id: user.id, email: user.email ?? null, role: user.role };
   }
 }
 

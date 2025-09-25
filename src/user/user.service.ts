@@ -74,6 +74,53 @@ export class UsersService {
     await this.userRepository.update(id, { role });
     return this.findOne(id);
   }
+
+  
+  //Google логін
+  // [ADD] Знайти користувача за провайдером/ID
+  async findByProvider(provider: 'google', providerId: string): Promise<User | null> {
+    return this.userRepository.findOne({ where: { provider, providerId } });
+  }
+
+  // [ADD] Прив’язати Google до існуючого акаунта
+  async linkProvider(
+    userId: number,
+    provider: 'google',
+    providerId: string,
+    avatarUrl?: string | null,
+    displayName?: string | null
+  ): Promise<User> {
+    await this.userRepository.update(userId, {
+      provider,
+      providerId,
+      avatarUrl: avatarUrl ?? undefined,
+      displayName: displayName ?? undefined,
+    });
+    const updated = await this.userRepository.findOne({ where: { id: userId } });
+    if (!updated) throw new NotFoundException('User not found after link');
+    return updated;
+  }
+
+  // [ADD] Створити користувача виключно з OAuth-даних
+  async createOAuthUser(dto: {
+    email: string | null;
+    displayName: string | null;
+    avatarUrl: string | null;
+    provider: 'google';
+    providerId: string;
+  }): Promise<User> {
+    const user = this.userRepository.create({
+      email: dto.email,
+      username: dto.displayName ?? null,
+      passwordHash: null,
+      provider: dto.provider,
+      providerId: dto.providerId,
+      displayName: dto.displayName,
+      avatarUrl: dto.avatarUrl,
+      role: UserRole.USER,
+    });
+    return this.userRepository.save(user);
+  }
 }
 
 
