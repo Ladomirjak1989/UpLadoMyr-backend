@@ -11,6 +11,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { TerminusModule } from '@nestjs/terminus';
 import { HealthController } from './health/health.controller';
+import { ProjectsModule } from './projects/projects.module';
 
 @Module({
   imports: [
@@ -100,6 +101,7 @@ import { HealthController } from './health/health.controller';
     TerminusModule,
     UserModule,
     AuthModule,
+    ProjectsModule
   ],
   controllers: [HealthController],
 })

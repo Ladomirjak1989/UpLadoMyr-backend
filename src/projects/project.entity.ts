@@ -1,7 +1,5 @@
-import {
-  Entity, PrimaryGeneratedColumn, Column, Index,
-  CreateDateColumn, UpdateDateColumn,
-} from 'typeorm';
+// src/projects/project.entity.ts
+import { Column, Entity, PrimaryGeneratedColumn, Index, CreateDateColumn, UpdateDateColumn, } from 'typeorm';
 
 export enum ProjectCategory {
   HOSPITALITY = 'Hospitality',
@@ -27,6 +25,7 @@ export class Project {
   @PrimaryGeneratedColumn()
   id!: number;
 
+  // базові поля
   @Column({ unique: true })
   slug!: string;
 
@@ -36,11 +35,29 @@ export class Project {
   @Column({ type: 'text' })
   description!: string;
 
-  @Column({ nullable: true })
-  imageUrl?: string;
+  @Column({ type: 'text', nullable: true })
+  longDescription!: string | null;           // 🆕 NEW
 
-  @Column({ nullable: true })
-  websiteUrl?: string;
+  @Column({ type: 'text', array: true, default: '{}' })
+  features!: string[];           // 🆕 NEW
+
+  @Column({ type: 'text', array: true, default: '{}' })
+  services!: string[];               // перелік сервісів     // 🆕 NEW
+
+  @Column({ type: 'text', nullable: true })
+  industry!: string | null;          // галузь     // 🆕 NEW
+
+  @Column({ type: 'text', nullable: true })
+  location!: string | null;          // локація (країна/місто) // 🆕 NEW
+
+  @Column({ type: 'text', array: true, default: '{}' })
+  gallery!: string[];        // 🆕 NEW
+
+  @Column({ type: 'text', nullable: true })
+  imageUrl!: string | null;
+
+  @Column({ type: 'text', nullable: true })
+  websiteUrl!: string | null;
 
   @Column({ type: 'enum', enum: ProjectCategory })
   category!: ProjectCategory;
@@ -48,13 +65,13 @@ export class Project {
   @Column({ default: false })
   isFeatured!: boolean;
 
-  @Column({ default: 'published' })
+  @Column({ type: 'text', default: 'published' })
   status!: 'draft' | 'published';
 
-  @Column('text', { array: true, default: '{}' })
+  @Column({ type: 'text', array: true, default: '{}' })
   techStack!: string[];
 
-  @Column({ default: 0 })
+  @Column({ type: 'int', default: 0 })
   orderIndex!: number;
 
   @CreateDateColumn()

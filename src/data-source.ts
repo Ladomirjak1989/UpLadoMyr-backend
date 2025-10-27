@@ -8,6 +8,12 @@ import { RenamePasswordToPasswordHash1724760000000 } from './migrations/17247600
 import { TimestampsToTimestamptz1724760000001 } from './migrations/1724760000001-TimestampsToTimestamptz';
 import { DryRun1725210000000 } from './migrations/1725210000000-DryRun';
 import {AddOauthColumnsToUsers1727140000000} from './migrations/1727140000000-AddOauthColumnsToUsers'
+import { CreateProjects1728000000000 } from './migrations/1728000000000-CreateProjects';
+import { SeedProjectsV21728015000000 } from './migrations/1728015000000-SeedProjectsV2';
+import { AddNewProjectFields1730120000000 } from './migrations/1730120000000-AddNewProjectFields';
+
+
+
 
 // Патерн для ентіті працює і в TS, і в зібраному dist (JS)
 const entities = [join(__dirname, '**/*.entity.{js,ts}')];
@@ -18,6 +24,9 @@ const MIGRATIONS = [
     TimestampsToTimestamptz1724760000001,
     DryRun1725210000000,
     AddOauthColumnsToUsers1727140000000,
+    CreateProjects1728000000000,
+    SeedProjectsV21728015000000,
+    AddNewProjectFields1730120000000,  
 ];
 
 // Спільні опції
