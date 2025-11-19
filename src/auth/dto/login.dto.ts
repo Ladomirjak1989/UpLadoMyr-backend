@@ -17,6 +17,6 @@ export class LoginDto {
 
    // нове керування TTL
   @IsOptional()
-  @IsIn(['session', '1h', '30d'])
-  ttl?: 'session' | '1h' | '30d';
+  @IsIn(['session', '12h', '30d'])
+  ttl?: 'session' | '12h' | '30d';
 }

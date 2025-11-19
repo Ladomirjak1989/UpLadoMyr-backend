@@ -11,6 +11,8 @@ import {AddOauthColumnsToUsers1727140000000} from './migrations/1727140000000-Ad
 import { CreateProjects1728000000000 } from './migrations/1728000000000-CreateProjects';
 import { SeedProjectsV21728015000000 } from './migrations/1728015000000-SeedProjectsV2';
 import { AddNewProjectFields1730120000000 } from './migrations/1730120000000-AddNewProjectFields';
+import { CreateBlogPosts1731000000000 } from './migrations/1731000000000-CreateBlogPosts';
+import { AddBlogCategoryCheck1731010000000 } from './migrations/1731010000000-AddBlogCategoryCheck';
 
 
 
@@ -26,7 +28,9 @@ const MIGRATIONS = [
     AddOauthColumnsToUsers1727140000000,
     CreateProjects1728000000000,
     SeedProjectsV21728015000000,
-    AddNewProjectFields1730120000000,  
+    AddNewProjectFields1730120000000,
+    CreateBlogPosts1731000000000,
+    AddBlogCategoryCheck1731010000000,  
 ];
 
 // Спільні опції

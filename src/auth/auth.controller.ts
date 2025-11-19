@@ -72,13 +72,13 @@ export class AuthController {
     const opts: CookieOptions = { ...baseCookieOpts };
 
     // Пріоритет: ttl > remember (для зворотної сумісності)
-    const ttl = dto.ttl ?? (dto.remember ? '30d' : '1h');
+    const ttl = dto.ttl ?? (dto.remember ? '30d' : '12h');
 
     switch (ttl) {
       case '30d':
         opts.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 днів
         break;
-      case '1h':
+      case '12h':
         opts.maxAge = 60 * 60 * 1000; // 1 година
         break;
       case 'session':
