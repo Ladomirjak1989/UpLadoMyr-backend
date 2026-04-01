@@ -13,6 +13,9 @@ import { SeedProjectsV21728015000000 } from './migrations/1728015000000-SeedProj
 import { AddNewProjectFields1730120000000 } from './migrations/1730120000000-AddNewProjectFields';
 import { CreateBlogPosts1731000000000 } from './migrations/1731000000000-CreateBlogPosts';
 import { AddBlogCategoryCheck1731010000000 } from './migrations/1731010000000-AddBlogCategoryCheck';
+import { CreateContacts1732000000000 } from './migrations/1732000000000-CreateContacts';
+import { CreateFooterLeads1732100000000 } from './migrations/1732100000000-CreateFooterLeads';
+
 
 
 
@@ -31,6 +34,8 @@ const MIGRATIONS = [
     AddNewProjectFields1730120000000,
     CreateBlogPosts1731000000000,
     AddBlogCategoryCheck1731010000000,  
+    CreateContacts1732000000000,
+    CreateFooterLeads1732100000000,
 ];
 
 // Спільні опції

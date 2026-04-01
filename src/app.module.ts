@@ -13,6 +13,8 @@ import { TerminusModule } from '@nestjs/terminus';
 import { HealthController } from './health/health.controller';
 import { ProjectsModule } from './projects/projects.module';
 import { BlogModule } from './blog/blog.module';
+import { ContactModule } from './contact/contact.module';
+import { FooterLeadModule } from './footer-lead/footer-lead.module';
 
 @Module({
   imports: [
@@ -104,6 +106,8 @@ import { BlogModule } from './blog/blog.module';
     AuthModule,
     ProjectsModule,
     BlogModule,
+    ContactModule,
+    FooterLeadModule,
   ],
   controllers: [HealthController],
 })
