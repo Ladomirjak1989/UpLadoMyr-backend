@@ -1,7 +1,9 @@
 // src/migrations/1724760000000-RenamePasswordToPasswordHash.ts
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class RenamePasswordToPasswordHash1724760000000 implements MigrationInterface {
+export class RenamePasswordToPasswordHash1724760000000
+  implements MigrationInterface
+{
   name = 'RenamePasswordToPasswordHash1724760000000';
 
   public async up(q: QueryRunner): Promise<void> {
@@ -34,7 +36,9 @@ export class RenamePasswordToPasswordHash1724760000000 implements MigrationInter
     `);
 
     // -- тепер уже безпечно
-    await q.query(`ALTER TABLE "users" ALTER COLUMN "password_hash" SET NOT NULL`);
+    await q.query(
+      `ALTER TABLE "users" ALTER COLUMN "password_hash" SET NOT NULL`,
+    );
   }
 
   public async down(q: QueryRunner): Promise<void> {
